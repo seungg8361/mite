@@ -7,6 +7,6 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface MedicineRepository extends JpaRepository<Medicines, int> {
-    List<Medicines> findByCid(int cid);
+public interface MedicineRepository extends JpaRepository<Medicines, Long> {
+    List<Medicines> findByCid(Long cid);
 }
