@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>소화제</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      overflow-x: hidden;
+    }
+    #sidebar {
+      height: 100vh;
+      position: fixed;
+      left: 0;
+      top: 0;
+      background-color: #F9F5FF;
+      padding-top: 1rem;
+      width: 200px;
+    }
+    #sidebar ul {
+      padding-left: 0;
+      list-style-type: none;
+    }
+    #sidebar ul li {
+      margin-bottom: 1rem;
+    }
+    #sidebar ul li a {
+      text-decoration: none;
+      color: #7D3EFF;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      padding: 0.5rem;
+      border-radius: 10px;
+    }
+    #sidebar ul li a:hover {
+      background-color: #E0D7FF;
+    }
+    #sidebar ul li a span {
+      margin-left: 10px;
+    }
+    .content {
+      margin-left: 220px;
+      padding: 1rem;
+    }
+  </style>
+</head>
+<body>
+<!-- 좌측 사이드바 -->
+<nav id="sidebar">
+  <ul>
+    <li><a href="index.html"><span>홈으로 돌아가기</span></a></li>
+    <li><a href="감기약.html"><span>감기약</span></a></li>
+    <li><a href="소화제.html" class="active"><span>소화제</span></a></li>
+    <!-- 기타 약제들 추가 -->
+  </ul>
+</nav>
+
+<!-- 우측 콘텐츠 -->
+<div class="content">
+  <h1>소화제</h1>
+  <section>
+    <h2>소화 불량 완화제</h2>
+    <div class="d-flex overflow-auto">
+      <div class="p-2 text-center">
+        <img src="https://via.placeholder.com/80" class="rounded-circle" alt="Label">
+        <p>Label</p>
+      </div>
+      <!-- 추가 이미지들 -->
+    </div>
+  </section>
+
+  <section class="mt-4">
+    <h2>위산 조절제</h2>
+    <div class="d-flex overflow-auto">
+      <div class="p-2 text-center">
+        <img src="https://via.placeholder.com/400x200" alt="1st" class="img-fluid">
+        <p>1st</p>
+      </div>
+      <!-- 추가 이미지들 -->
+    </div>
+  </section>
+
+  <section class="mt-4">
+    <h2>복부 팽만 완화제</h2>
+    <div class="d-flex overflow-auto">
+      <div class="p-2 text-center">
+        <img src="https://via.placeholder.com/80" class="rounded" alt="Label">
+        <p>Label</p>
+      </div>
+      <!-- 추가 이미지들 -->
+    </div>
+  </section>
+
+  <section class="mt-4">
+    <h2>기타 소화제</h2>
+    <div class="d-flex overflow-auto">
+      <div class="p-2 text-center">
+        <img src="https://via.placeholder.com/80" class="rounded" alt="Artist Song">
+        <p>Artist<br>Song</p>
+      </div>
+      <!-- 추가 이미지들 -->
+    </div>
+  </section>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

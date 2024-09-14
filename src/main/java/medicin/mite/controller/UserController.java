@@ -1,5 +1,6 @@
 package medicin.mite.controller;
 
+import jakarta.servlet.http.HttpSession;
 import medicin.mite.entity.Users;
 import medicin.mite.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,8 +9,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-
-import java.util.Optional;
 
 @Controller
 public class UserController {
@@ -25,12 +24,12 @@ public class UserController {
 
     @PostMapping("/signup")
     public String signupSubmit(@ModelAttribute Users users, Model model) {
-        Optional<Users> existingUser = userService.findByUserid(users.getUserid());
-        if (existingUser.isPresent()) {
-            model.addAttribute("message", "이미 사용중인 ID입니다!");
+        String message = userService.validateSignup(users);
+
+        if (!message.equals("success")) {
+            model.addAttribute("message", message);
             return "signup";
         }
-        userService.save(users);
         return "redirect:/login";
     }
 
@@ -41,20 +40,27 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public String loginSubmit(@ModelAttribute Users users, Model model) {
-        Optional<Users> existingUserOpt = userService.findByUserid(users.getUserid());
-        if (existingUserOpt.isPresent()) {
-            Users existingUser = existingUserOpt.get();
-            if (existingUser.getUserpw().equals(users.getUserpw())) {
-                model.addAttribute("message", "Welcome, " + users.getUserid() + "!");
-                return "welcome";
-            } else {
-                model.addAttribute("message", "비밀번호가 틀렸습니다!");
-                return "login";
-            }
+    public String loginSubmit(@ModelAttribute Users users, HttpSession session, Model model) {
+        String message = userService.validateLogin(users);
+
+        if (message.startsWith("환영합니다")) {
+            session.setAttribute("userid", users.getUserid());
+            model.addAttribute("message", message);
+            return "index";
         } else {
-            model.addAttribute("message", "아이디가 틀렸습니다!");
+            model.addAttribute("message", message);
             return "login";
         }
     }
+    @GetMapping("/compare")
+    public String comparePage(Model model, HttpSession session) {
+        // 세션에서 약 정보 가져오기
+        Object medicines = session.getAttribute("medicinesToCompare");
+        // 약 정보가 있을 경우 모델에 추가
+        if (medicines != null) {
+            model.addAttribute("medicines", medicines);
+        }
+        return "compare"; // compare.html로 이동
+    }
 }
+

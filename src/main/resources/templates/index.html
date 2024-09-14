@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>홈 화면</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    .container {
+      display: flex;
+      height: 100vh; /* 화면 전체 높이 */
+      flex-direction: row;
+    }
+    .chat-container {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      overflow: hidden;
+      height: 70vh;
+    }
+    .chat-box {
+      flex: 1;
+      overflow-y: auto;
+      padding: 15px;
+      background-color: rgba(246, 242, 201, 0.7);
+      border-bottom: 1px solid #ddd;
+      display: flex;
+      flex-direction: column; /* 메시지 역순으로 정렬 */
+    }
+    .chat-message {
+      margin-bottom: 10px;
+      padding: 10px;
+      border-radius: 10px;
+      max-width: calc(100% - 20px); /* 자동 조정 */
+      word-break: break-word;
+      display: inline-block; /* 필요시 인라인 블록으로 */
+    }
+    .chat-message.user {
+      color: black;
+      background-color: #abd6f8;
+      align-self: flex-end; /* 오른쪽 정렬 */
+      text-align: right; /* 메시지 내용 오른쪽 정렬 */
+    }
+    .chat-message.bot {
+      color: black;
+      background-color: #bcfab6;
+      align-self: flex-start; /* 왼쪽 정렬 */
+      text-align: left; /* 메시지 내용 왼쪽 정렬 */
+    }
+    .chat-message.bot::before {
+      content: '🤖';
+      margin-right: 10px;
+      font-size: 1.5em;
+    }
+    .keyword-buttons {
+      display: flex;
+      flex-wrap: wrap; /* 버튼들을 여러 줄로 나누도록 설정 */
+      padding: 50px;
+      border-left: 1px solid #ddd;
+      background-color: #fae4e4;
+      width: 400px; /* 컨테이너 너비 */
+      height: 70vh; /* 키워드 버튼 컨테이너의 높이 */
+      overflow-y: auto; /* 버튼이 많을 경우 스크롤 가능 */
+    }
+    .keyword-button {
+      background-color: #0278f8;
+      margin: 15px; /* 버튼 사이의 여백 조정 */
+      padding: 10px 10px; /* 버튼의 패딩 조정 */
+      font-size: 20px; /* 버튼 글자 크기 조정 */
+      text-align: center; /* 버튼 텍스트 가운데 정렬 */
+      box-sizing: border-box; /* 패딩과 보더를 포함하여 총 너비 계산 */
+    }
+    .keyword-button:hover{
+      background-color: #afd1ef;
+    }
+    .search-container {
+      margin-top: 30px;
+      display: flex;
+      justify-content: center; /* 가로 중앙 정렬 */
+      align-items: center; /* 세로 중앙 정렬 */
+    }
+    .search-form {
+      display: flex;
+      align-items: center;
+      width: 100%; /* 컨테이너의 너비에 맞추기 */
+      max-width: 600px; /* 최대 너비 설정, 필요 시 조정 */
+    }
+    .search-input {
+      width: 100%; /* 컨테이너의 너비에 맞추기 */
+      max-width: 500px; /* 최대 너비 설정 */
+      padding: 10px; /* 여백 조정 */
+      font-size: 16px; /* 글자 크기 조정 */
+      border: 1px solid #ddd; /* 테두리 스타일 */
+      border-radius: 4px; /* 모서리 둥글게 */
+    }
+    .search-button {
+      padding: 10px 20px; /* 버튼의 패딩 조정 */
+      font-size: 16px; /* 글자 크기 조정 */
+      background-color: #007bff; /* 버튼 배경색 */
+      color: white; /* 글자 색상 */
+      border: none; /* 테두리 제거 */
+      border-radius: 4px; /* 모서리 둥글게 */
+      cursor: pointer; /* 클릭 시 커서 모양 변경 */
+    }
+    .search-button:hover {
+      background-color: #0056b3; /* 버튼 호버 시 색상 변경 */
+    }
+  </style>
+</head>
+<body>
+<div class="d-flex">
+  <nav id="sidebar" class="bg-light p-3" style="width: 250px;">
+    <ul class="nav flex-column">
+      <li class="nav-item mb-2">
+        <a href="감기약.html" class="nav-link">
+          감기약
+        </a>
+      </li>
+      <li class="nav-item mb-2">
+        <a href="소화제.html" class="nav-link">
+          소화제
+        </a>
+      </li>
+      <li class="nav-item mb-2">
+        <a href="해열진통소염제.html" class="nav-link">
+          해열진통소염제
+        </a>
+      </li>
+      <li class="nav-item mb-2">
+        <a href="피부비뇨생식기약.html" class="nav-link">
+          피부비뇨생식기약
+        </a>
+      </li>
+      <li class="nav-item mb-2">
+        <a href="안구용제.html" class="nav-link">
+          안구용제
+        </a>
+      </li>
+      <!-- 추가 약 종류 -->
+    </ul>
+  </nav>
+  <!-- 메인 콘텐츠 -->
+  <div class="container-fluid">
+    <h1 class="text-center mt-3">Home</h1>
+    <div class="search-container">
+      <form action="#" th:action="@{/search}" method="GET" class="search-form">
+        <input type="text" name="search" class="search-input" placeholder="약 이름을 검색해주세요" required>
+        <button type="submit" class="search-button">검색</button>
+      </form>
+    </div>
+    <h5 class="text-center mt-3 mb-3">챗봇</h5>
+    <div class="container">
+      <div class="chat-container">
+        <div id="chat-box" class="chat-box"></div>
+      </div>
+      <div class="keyword-buttons">
+        <button type="button" class="btn btn-secondary keyword-button" onclick="submitKeyword('발열')">발열</button>
+        <button type="button" class="btn btn-secondary keyword-button" onclick="submitKeyword('두통')">두통</button>
+        <button type="button" class="btn btn-secondary keyword-button" onclick="submitKeyword('소화불량')">소화불량</button>
+        <button type="button" class="btn btn-secondary keyword-button" onclick="submitKeyword('두드러기')">두드러기</button>
+        <button type="button" class="btn btn-secondary keyword-button" onclick="submitKeyword('몸살')">몸살</button>
+      </div>
+    </div>
+    <!-- 사람들이 자주 찾는 약 -->
+    <section class="mt">
+      <h2>사람들이 자주 찾는 약</h2>
+      <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner">
+          <div class="carousel-item active">
+            <div class="d-flex justify-content-between">
+              <img src="/images/tylenol.png" class="d-block" width="400" height="100" alt="Tylenol">
+              <img src="https://via.placeholder.com/400x200" class="d-block w-100 ms-2" alt="2nd">
+            </div>
+          </div>
+          <div class="carousel-item">
+            <div class="d-flex justify-content-between">
+              <img src="https://via.placeholder.com/400x200" class="d-block w-100" alt="3rd">
+              <img src="https://via.placeholder.com/400x200" class="d-block w-100 ms-2" alt="4th">
+            </div>
+          </div>
+        </div>
+        <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-bs-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Previous</span>
+        </a>
+        <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-bs-slide="next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Next</span>
+        </a>
+      </div>
+    </section>
+    <!-- 주변 약국 -->
+    <section class="mt-4">
+      <h2>주변 약국</h2>
+      <div class="d-flex overflow-auto">
+        <div class="p-2 text-center">
+          <img src="https://via.placeholder.com/80" class="rounded" alt="Artist Song">
+          <p>Artist<br>Song</p>
+        </div>
+        <!-- 추가 이미지들 -->
+      </div>
+    </section>
+  </div>
+</div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  function submitKeyword(keyword) {
+    fetch('/chat/send-message', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ message: keyword })
+    })
+            .then(response => response.json())
+            .then(data => {
+              const chatBox = document.querySelector('.chat-box');
+              const userMessage = document.createElement('div');
+              userMessage.className = 'chat-message user';
+              userMessage.textContent = `${keyword}`;
+              chatBox.appendChild(userMessage);
+
+              if (data.info) {
+                const infoMessage = document.createElement('div');
+                infoMessage.className = 'chat-message bot';
+                chatBox.appendChild(infoMessage);
+
+                let i = 0;
+                const typingEffect = () => {
+                  if (i < data.info.length) {
+                    infoMessage.textContent += data.info.charAt(i);
+                    i++;
+                    setTimeout(typingEffect, 30);
+                  } else {
+                    if (data.medicines && data.medicines.length > 0) {
+                      const container = document.createElement('div');
+                      container.style.display = 'flex';
+                      container.style.flexWrap = 'wrap';
+                      container.style.gap = '10px';
+                      container.style.justifyContent = 'flex-start';
+
+                      data.medicines.forEach(medicine => {
+                        const medicineInfo = document.createElement('div');
+                        medicineInfo.className = 'chat-message bot';
+                        medicineInfo.style.display = 'flex';
+                        medicineInfo.style.flexDirection = 'column';
+                        medicineInfo.style.alignItems = 'center';
+                        medicineInfo.style.width = '150px';
+                        medicineInfo.style.margin = '10px';
+
+                        const image = document.createElement('img');
+                        image.src = medicine.image || 'https://via.placeholder.com/150';
+                        image.alt = medicine.name;
+                        image.style.width = '100px';
+                        image.style.height = 'auto';
+                        image.style.objectFit = 'cover';
+
+                        const name = document.createElement('div');
+                        name.textContent = medicine.name || '이름 없음';
+                        name.style.fontWeight = 'bold';
+                        name.style.textAlign = 'center';
+                        name.style.marginTop = '5px';
+
+                        image.onclick = () => {
+                          window.location.href = '/compare'; // GET 요청으로 이동
+                        };
+                        name.onclick = () => {
+                          window.location.href = '/compare'; // GET 요청으로 이동
+                        };
+
+                        medicineInfo.appendChild(image);
+                        medicineInfo.appendChild(name);
+                        container.appendChild(medicineInfo);
+                      });
+
+                      chatBox.appendChild(container);
+                      chatBox.scrollTop = chatBox.scrollHeight;
+                    } else {
+                      const botMessage = document.createElement('div');
+                      botMessage.className = 'chat-message bot';
+                      botMessage.textContent = `챗봇: 약 정보를 찾을 수 없습니다.`;
+                      chatBox.appendChild(botMessage);
+                    }
+                  }
+                };
+                typingEffect();
+              }
+              chatBox.scrollTop = chatBox.scrollHeight;
+            })
+            .catch(error => console.error('Error:', error));
+  }
+</script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const searchForm = document.querySelector('.search-form');
+    searchForm.addEventListener('submit', function(event) {
+      event.preventDefault(); // 폼 제출 기본 동작 방지
+
+      const searchInput = document.querySelector('.search-input').value;
+      fetchSearchResults(searchInput);
+    });
+
+    function fetchSearchResults(query) {
+      fetch('/search', { // 서버에서 처리할 API 엔드포인트로 요청
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ query: query })
+      })
+              .then(response => response.json())
+              .then(data => {
+                displaySearchResults(data);
+              })
+              .catch(error => console.error('Error:', error));
+    }
+
+    function displaySearchResults(data) {
+      const chatBox = document.querySelector('.chat-box');
+
+      // 이전 검색 결과 삭제
+      chatBox.innerHTML = '';
+
+      if (data && data.results && data.results.length > 0) {
+        data.results.forEach(result => {
+          const resultMessage = document.createElement('div');
+          resultMessage.className = 'chat-message bot';
+
+          const resultLink = document.createElement('a');
+          resultLink.href = result.url;
+          resultLink.textContent = result.title;
+          resultLink.target = '_blank';
+
+          resultMessage.appendChild(resultLink);
+          chatBox.appendChild(resultMessage);
+        });
+      } else {
+        const noResultsMessage = document.createElement('div');
+        noResultsMessage.className = 'chat-message bot';
+        noResultsMessage.textContent = '검색 결과가 없습니다.';
+        chatBox.appendChild(noResultsMessage);
+      }
+
+      chatBox.scrollTop = chatBox.scrollHeight;
+    }
+  });
+</script>
+
+</body>
+</html>

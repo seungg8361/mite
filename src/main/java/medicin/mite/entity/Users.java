@@ -4,9 +4,11 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 @Entity
 public class Users {
     @Id
@@ -16,14 +18,12 @@ public class Users {
     private String userpw;
     private String username;
     private String usernumber;
-    private String useraddress;
 
-    public Users(String userid, String userpw, String username, String usernumber, String useraddress) {
+    public Users(String userid, String userpw, String username, String usernumber) {
         this.userid = userid;
         this.userpw = userpw;
         this.username = username;
         this.usernumber = usernumber;
-        this.useraddress = useraddress;
     }
     public Users() {}
 }
