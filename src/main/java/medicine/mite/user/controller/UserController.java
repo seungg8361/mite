@@ -1,66 +1,92 @@
 package medicine.mite.user.controller;
 
 import jakarta.servlet.http.HttpSession;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import medicine.mite.user.dto.UsersDto;
 import medicine.mite.user.entity.Users;
+import medicine.mite.user.repository.UserRepository;
 import medicine.mite.user.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
+import java.util.Optional;
+
+@Slf4j
 @Controller
+@RequiredArgsConstructor
 public class UserController {
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
 
     @GetMapping("/signup")
     public String signupForm(Model model) {
-        model.addAttribute("users", new Users());
+        model.addAttribute("usersDto", new UsersDto());
         return "signup";
     }
-
     @PostMapping("/signup")
-    public String signupSubmit(@ModelAttribute Users users, Model model) {
-        String message = userService.validateSignup(users);
-
-        if (!message.equals("success")) {
-            model.addAttribute("message", message);
+    public String signupSubmit(@Validated UsersDto usersDto, Model model) {
+        try {
+            Users user = Users.createUsers(usersDto);
+            userService.saveUsers(user);
+        } catch (IllegalStateException e) {
+            model.addAttribute("errorMessage", e.getMessage());
             return "signup";
         }
         return "redirect:/login";
     }
-
     @GetMapping("/login")
     public String loginForm(Model model) {
-        model.addAttribute("users", new Users());
+        model.addAttribute("usersDto", new UsersDto());
         return "login";
     }
-
     @PostMapping("/login")
-    public String loginSubmit(@ModelAttribute Users users, HttpSession session, Model model) {
-        String message = userService.validateLogin(users);
-
+    public String loginSubmit(@ModelAttribute UsersDto usersDto, HttpSession session, Model model) {
+        String message = userService.validateLogin(usersDto);
         if (message.startsWith("환영합니다")) {
-            session.setAttribute("userid", users.getUserid());
-            model.addAttribute("message", message);
-            return "index";
+            // 로그인 성공 시 세션에 사용자 정보 저장
+            Optional<Users> usersinfo = userService.findByUserid(usersDto.getUserid());
+            if (usersinfo.isPresent()) {
+                Users user = usersinfo.get(); // 실제 Users 객체를 가져옴
+                session.setAttribute("userkey", user);
+                // 세션에 정보가 잘 담겼는지 확인하는 로그
+                log.info("User logged in: {} (ID: {})", user.getUsername(),user.getUsernumber());
+                return "/index"; // index 페이지로 리다이렉트
+            } else {
+                model.addAttribute("message", "사용자를 찾을 수 없습니다.");
+                return "login"; // 사용자 정보를 찾을 수 없는 경우 로그인 페이지로 돌아감
+            }
         } else {
             model.addAttribute("message", message);
             return "login";
         }
     }
-    @GetMapping("/compare")
-    public String comparePage(Model model, HttpSession session) {
-        // 세션에서 약 정보 가져오기
-        Object medicines = session.getAttribute("medicinesToCompare");
-        // 약 정보가 있을 경우 모델에 추가
-        if (medicines != null) {
-            model.addAttribute("medicines", medicines);
+    @GetMapping("/logout")
+    public String logout(HttpSession session) {
+        session.invalidate();
+        return "redirect:/login";
+    }
+    @PostMapping("/checkPwdForm")
+    public String checkPassword(@RequestParam String password, HttpSession session, Model model) {
+        Users currentUser = (Users) session.getAttribute("userkey"); // 현재 사용자 정보 가져오기
+        if (currentUser != null && password.equals(currentUser.getUserpw())) {
+            return "redirect:/userupdate"; // 비밀번호가 일치하면 회원정보 수정 페이지로 이동
         }
-        return "compare"; // compare.html로 이동
+        model.addAttribute("error", "비밀번호가 맞지 않습니다.");
+        return "mypage"; // 비밀번호가 틀리면 다시 비밀번호 확인 페이지로
+    }
+    @PostMapping("/update")
+    public String updateUser(UsersDto usersDto, HttpSession session) {
+        Users currentUser = (Users) session.getAttribute("userkey");
+        if (currentUser != null) {
+            // 사용자 정보 업데이트
+            userService.updateUser(usersDto, currentUser);
+            // 세션 업데이트
+            session.setAttribute("userkey", currentUser);
+        }
+        return "redirect:/mypage"; // 업데이트 후 리다이렉트할 페이지
     }
 }
-

@@ -34,8 +34,6 @@ public class ChatService {
                 String imageUrl = medicine.getMimage();  // 이미지 URL 생성
                 medicineInfo.put("image", imageUrl);
 
-                System.out.println("Medicine Name: " + medicine.getMname());
-                System.out.println("Image URL: " + imageUrl);
                 medicineList.add(medicineInfo);
             }
             response.put("medicines", medicineList);
@@ -43,7 +41,6 @@ public class ChatService {
         } else {
             response.put("response", "해당 키워드에 대한 정보를 찾을 수 없습니다.");
         }
-
         return response;
     }
 }

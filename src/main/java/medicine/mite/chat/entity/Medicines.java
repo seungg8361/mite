@@ -12,11 +12,11 @@ public class Medicines {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 
     private Long id;
+
     private String mname;
     @Lob
     private String mimage;
     private Long cid;
-
     // 기본 생성자
     public Medicines() {}
 }
