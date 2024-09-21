@@ -1,9 +1,9 @@
 package medicine.mite.user.controller;
 
-import jakarta.servlet.http.HttpServletRequest;
+import lombok.extern.slf4j.Slf4j;
 import medicine.mite.chat.dto.MedicineDto;
+import medicine.mite.chat.entity.Medicines;
 import medicine.mite.chat.service.ChatService;
-import medicine.mite.user.dto.UsersDto;
 import medicine.mite.user.entity.Users;
 import medicine.mite.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,49 +15,58 @@ import jakarta.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @Controller
 public class BorderController {
 
-    @Autowired
-    private UserService userService;
-
-    @Autowired
-    private ChatService chatService;
-
     @GetMapping("/compare")
     public String comparePage(Model model, HttpSession session) {
-        List<MedicineDto> medicines = (List<MedicineDto>) session.getAttribute("medicinesToCompare");
+        List<MedicineDto> medicines = (List<MedicineDto>) session.getAttribute("recentMedicines");
         if (medicines != null) {
             model.addAttribute("medicines", medicines);
         }
         return "compare";
     }
     @PostMapping("/save-medicine-info")
-    @ResponseBody
     public String saveMedicineInfo(@RequestBody MedicineDto medicineDto, HttpSession session) {
-        List<MedicineDto> medicines = (List<MedicineDto>) session.getAttribute("medicinesToCompare");
-
-        if (medicines == null) {
-            medicines = new ArrayList<>();
+        // 약 정보를 세션에 추가
+        List<Medicines> recentMedicines = (List<Medicines>) session.getAttribute("recentMedicines");
+        if (recentMedicines == null) {
+            recentMedicines = new ArrayList<>();
         }
-        medicines.add(medicineDto);
-        session.setAttribute("medicinesToCompare", medicines);
+        // 이미 추가된 약인지 확인
+        if (recentMedicines.stream().noneMatch(m -> m.getMimage().equals(medicineDto.getImage()))) {
+            Medicines medicine = new Medicines();
+            medicine.setId(medicineDto.getId());
+            medicine.setMimage(medicineDto.getImage());
+            medicine.setMname(medicineDto.getName());
+            recentMedicines.add(medicine);
+            session.setAttribute("recentMedicines", recentMedicines);
+        }
 
-        return "success"; // 클라이언트에게 성공 메시지 반환
+        return "redirect:/compare";
     }
     @GetMapping("/mypage")
-    public String myPage(Model model, HttpSession session, Users users) {
-        List<MedicineDto> recentMedicines = (List<MedicineDto>) session.getAttribute("recentMedicines");
-        if (recentMedicines == null) {
-            recentMedicines = new ArrayList<>(); // 빈 리스트로 초기화
-        }
+    public String myPage(HttpSession session, Model model) {
+        List<Medicines> recentMedicines = (List<Medicines>) session.getAttribute("recentMedicines");
         model.addAttribute("recentMedicines", recentMedicines);
         return "mypage";
     }
     // 비밀번호 확인
     @GetMapping("/userupdate")
-    public String userUpdatePage(Model model, HttpSession session,Users users) {
+    public String userUpdatePage(Model model, Users users) {
         model.addAttribute("users", users);
         return "userupdate"; // userupdate.html로 이동
+    }
+    @GetMapping("/index")
+    public String indexPage(HttpSession session) {
+        // 세션에 저장된 값 확인
+        Users sessionUser = (Users) session.getAttribute("userkey");
+        if (sessionUser != null) {
+            log.info("Session User: {} (ID: {})", sessionUser.getUsername(), sessionUser.getUserid());
+        } else {
+            log.warn("No user found in session.");
+        }
+        return "index";
     }
 }

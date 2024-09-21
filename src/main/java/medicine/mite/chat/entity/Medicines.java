@@ -16,6 +16,7 @@ public class Medicines {
     private String mname;
     @Lob
     private String mimage;
+
     private Long cid;
     // 기본 생성자
     public Medicines() {}

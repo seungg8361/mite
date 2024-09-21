@@ -4,15 +4,12 @@ import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import medicine.mite.user.dto.UsersDto;
-import medicine.mite.user.entity.Users;
-import medicine.mite.user.repository.UserRepository;
-import medicine.mite.user.service.UserService;
+import medicine.mite.user.entity.Users;import medicine.mite.user.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.security.Principal;
 import java.util.Optional;
 
 @Slf4j
@@ -53,8 +50,8 @@ public class UserController {
                 Users user = usersinfo.get(); // 실제 Users 객체를 가져옴
                 session.setAttribute("userkey", user);
                 // 세션에 정보가 잘 담겼는지 확인하는 로그
-                log.info("User logged in: {} (ID: {})", user.getUsername(),user.getUsernumber());
-                return "/index"; // index 페이지로 리다이렉트
+                log.info("User logged in: {} (ID: {})", user.getUsername(),user.getUserid());
+                return "redirect:/index"; // index 페이지로 리다이렉트
             } else {
                 model.addAttribute("message", "사용자를 찾을 수 없습니다.");
                 return "login"; // 사용자 정보를 찾을 수 없는 경우 로그인 페이지로 돌아감
