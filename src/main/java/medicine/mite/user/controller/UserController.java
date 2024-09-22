@@ -10,6 +10,8 @@ import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 @Slf4j
@@ -67,21 +69,27 @@ public class UserController {
         return "redirect:/login";
     }
     @PostMapping("/checkPwdForm")
-    public String checkPassword(@RequestParam String password, HttpSession session, Model model) {
+    public String checkPassword(@RequestParam String userpw, HttpSession session, Model model) {
         Users currentUser = (Users) session.getAttribute("userkey"); // 현재 사용자 정보 가져오기
-        if (currentUser != null && password.equals(currentUser.getUserpw())) {
+        if (currentUser != null && userpw.equals(currentUser.getUserpw())) {
             return "redirect:/userupdate"; // 비밀번호가 일치하면 회원정보 수정 페이지로 이동
         }
         model.addAttribute("error", "비밀번호가 맞지 않습니다.");
         return "mypage"; // 비밀번호가 틀리면 다시 비밀번호 확인 페이지로
     }
     @PostMapping("/update")
-    public String updateUser(UsersDto usersDto, HttpSession session) {
+    public String updateUser(@ModelAttribute UsersDto usersDto, HttpSession session, Model model) {
         Users currentUser = (Users) session.getAttribute("userkey");
         if (currentUser != null) {
+            // 비밀번호 확인
+            if (!usersDto.getUserpw().equals(usersDto.getConfirmPassword())) {
+                model.addAttribute("message", "비밀번호가 일치하지 않습니다.");
+                return "userupdate"; // 에러 메시지를 보여주기 위해 다시 폼으로 돌아감
+            }
             // 사용자 정보 업데이트
             userService.updateUser(usersDto, currentUser);
-            // 세션 업데이트
+            // 비밀번호 업데이트
+            currentUser.setUserpw(usersDto.getUserpw());
             session.setAttribute("userkey", currentUser);
         }
         return "redirect:/mypage"; // 업데이트 후 리다이렉트할 페이지
