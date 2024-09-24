@@ -7,6 +7,7 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
+@Table(name="medicines")
 public class Medicines {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,6 +19,12 @@ public class Medicines {
     private String mimage;
 
     private Long cid;
+
+    private int price;
+
+    private String 	ingredients;
+
+    private String efficacy;
     // 기본 생성자
     public Medicines() {}
 }

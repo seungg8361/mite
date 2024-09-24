@@ -2,12 +2,10 @@ package medicine.mite.chat.controller;
 
 import jakarta.servlet.http.HttpSession;
 import medicine.mite.chat.service.ChatService;
-import medicine.mite.chat.entity.Medicines;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Map;
 
 @RestController

@@ -18,6 +18,9 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
+    public void deleteUserById(Long id) {
+        userRepository.deleteById(id);
+    }
     public Optional<Users> findByUserid(String userid) {
         return userRepository.findByUserid(userid);
     }
