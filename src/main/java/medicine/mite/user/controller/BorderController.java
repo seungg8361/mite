@@ -84,7 +84,6 @@ public class BorderController {
     public String indexPage(HttpSession session, RedirectAttributes redirectAttributes) {
         Users sessionUser = (Users) session.getAttribute("userkey");
         if (sessionUser != null) {
-            log.info("Session User: {} (ID: {})", sessionUser.getUsername(), sessionUser.getUserid());
         } else {
             redirectAttributes.addFlashAttribute("error", "사용자가 로그인되어 있지 않습니다.");
             return "redirect:/login";

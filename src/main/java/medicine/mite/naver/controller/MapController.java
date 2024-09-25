@@ -24,8 +24,6 @@ public class MapController {
 
     @GetMapping("/search")
     public String search(@RequestParam(value = "query", required = false) String query, Model model) {
-        log.info("Search query: {}", query);
-
         // 약 이름으로 약국 정보를 가져오는 로직
         List<Pharmacy> pharmacies = pharmacyService.searchPharmaciesByMedicine(query);
 
@@ -35,11 +33,8 @@ public class MapController {
         } else {
             model.addAttribute("message", "검색된 약국이 없습니다.");
         }
-
         // 모델에 지도 클라이언트 ID 추가
         model.addAttribute("clientId", naverMapProperties.getClientId());
-
-        log.info("Returning view name: search");
 
         return "search";  // 템플릿 파일 이름 반환
     }

@@ -25,6 +25,7 @@ public class Pharmacy {
     private String phours; // 약국 운영 시간
     private double latitude;
     private double longitude;
+    private String pimage;
     @OneToMany(mappedBy = "pharmacy")
     @JsonManagedReference
     private List<Drug> drugs; // 약국이 제공하는 약 목록
