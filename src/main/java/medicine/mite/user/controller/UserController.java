@@ -65,6 +65,7 @@ public class UserController {
             if (usersinfo.isPresent()) {
                 Users user = usersinfo.get(); // 실제 Users 객체를 가져옴
                 session.setAttribute("userkey", user);
+                session.setAttribute("username", user.getUsername());
                 return "redirect:/index"; // index 페이지로 리다이렉트
             } else {
                 // 사용자를 찾을 수 없는 경우에도 로그인 페이지로 돌아감
@@ -77,7 +78,6 @@ public class UserController {
             return "login"; // 로그인 실패 시 로그인 페이지로 이동
         }
     }
-
     @GetMapping("/logout")
     public String logout(HttpSession session) {
         session.invalidate();

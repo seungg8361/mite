@@ -17,6 +17,7 @@ public class Drug {
     private String dname; // 약 이름
     private int quantity; // 약 개수
 
+    private String dimage;
     @ManyToOne
     @JoinColumn(name = "pharmacy_id") // 약국 ID를 외래 키로 사용
     @JsonBackReference

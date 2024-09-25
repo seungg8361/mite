@@ -1,7 +1,6 @@
 package medicine.mite.chat.service;
 
 import lombok.extern.slf4j.Slf4j;
-import medicine.mite.chat.dto.MedicineDto;
 import medicine.mite.chat.repository.ChatRepository;
 import medicine.mite.chat.entity.Chat;
 import medicine.mite.chat.entity.Medicines;
@@ -48,17 +47,5 @@ public class ChatService {
             response.put("response", "해당 키워드에 대한 정보를 찾을 수 없습니다.");
         }
         return response;
-    }
-    // 약 정보 저장 로직
-    public void saveMedicine(MedicineDto medicineDto) {
-        Medicines medicine = new Medicines();
-        medicine.setMname(medicineDto.getName());
-        medicine.setMimage(medicineDto.getImage());
-        medicine.setPrice(medicineDto.getPrice());  // 가격 설정
-        medicine.setIngredients(medicineDto.getIngredients());  // 성분 설정
-        medicine.setEfficacy(medicineDto.getEfficacy());  // 효능 설정
-
-        // 약 정보를 데이터베이스에 저장
-        medicineRepository.save(medicine);
     }
 }

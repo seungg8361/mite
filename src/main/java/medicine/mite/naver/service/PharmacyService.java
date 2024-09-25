@@ -28,9 +28,11 @@ public class PharmacyService {
                 .map(drug -> drug.getPharmacy().getId()) // 약의 pharmacy 객체에서 ID 가져오기
                 .distinct() // 중복 제거
                 .collect(Collectors.toList());
+
         if (pharmacyIds.isEmpty()) {
             return List.of(); // 빈 리스트 반환
         }
+
         // pharmacy 테이블에서 약국 정보 조회
         List<Pharmacy> pharmacies = pharmacyRepository.findByIdIn(pharmacyIds);
 
@@ -39,7 +41,15 @@ public class PharmacyService {
             List<Drug> pharmacyDrugs = drugs.stream()
                     .filter(drug -> drug.getPharmacy().getId().equals(pharmacy.getId())) // pharmacy 객체에서 ID를 비교
                     .collect(Collectors.toList());
-            pharmacy.setDrugs(pharmacyDrugs); // 약국 객체에 약 목록 추가
+
+            // 약국 객체에 약 목록 추가
+            pharmacy.setDrugs(pharmacyDrugs);
+
+            // 각 약의 이미지 URL을 설정
+            pharmacyDrugs.forEach(drug -> {
+                String imageUrl = drug.getDimage(); // 이미지 URL 생성
+                drug.setDimage(imageUrl); // 이미지 URL을 Drug 객체에 설정 (setImageUrl 메서드가 필요)
+            });
         });
 
         return pharmacies;

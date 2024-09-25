@@ -19,9 +19,6 @@ import java.util.List;
 @Controller
 public class BorderController {
 
-    @Autowired
-    private ChatService chatService;
-
     @GetMapping("/compare")
     public String comparePage(HttpSession session, Model model) {
         List<Medicines> recentMedicines = (List<Medicines>) session.getAttribute("recentMedicines");
@@ -49,8 +46,6 @@ public class BorderController {
             recentMedicines.add(medicine);
             // 세션에 업데이트된 약 리스트 저장
             session.setAttribute("recentMedicines", recentMedicines);
-            // 약 정보를 데이터베이스에 저장
-            chatService.saveMedicine(medicineDto);
             // 성공 메시지를 리다이렉트에 추가
             redirectAttributes.addFlashAttribute("success", "약 정보가 성공적으로 추가되었습니다.");
         } else {
@@ -79,15 +74,17 @@ public class BorderController {
         model.addAttribute("users", users);
         return "userupdate";
     }
-
     @GetMapping("/index")
-    public String indexPage(HttpSession session, RedirectAttributes redirectAttributes) {
+    public String indexPage(HttpSession session, RedirectAttributes redirectAttributes, Model model) {
         Users sessionUser = (Users) session.getAttribute("userkey");
         if (sessionUser != null) {
+            String username = (String) session.getAttribute("username");
+            model.addAttribute("username", username); // 모델에 사용자 이름 추가
+            log.info("indexPage에서 가져온 username: {}", username); // 로그 추가
         } else {
             redirectAttributes.addFlashAttribute("error", "사용자가 로그인되어 있지 않습니다.");
             return "redirect:/login";
         }
-        return "index";
+        return "index"; // index.html로 이동
     }
 }
