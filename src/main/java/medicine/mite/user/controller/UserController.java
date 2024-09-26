@@ -33,7 +33,7 @@ public class UserController {
             Users user = Users.createUsers(usersDto);
             userService.saveUsers(user);
         } catch (IllegalStateException e) {
-            model.addAttribute("errorMessage", e.getMessage());
+            model.addAttribute("error", "이미 존재하는 계정입니다.");
             return "signup";
         }
         return "redirect:/login";
