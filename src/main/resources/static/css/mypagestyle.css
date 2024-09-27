@@ -81,5 +81,5 @@ body::before {
     vertical-align: middle; /* 세로 정렬 */
     padding: 10px;
 }
-#profile div p strong { font-size: 30px; }
+#profile div p strong { font-size: 30px; text-align: center; }
 #profile div p span { font-size: 20px; }

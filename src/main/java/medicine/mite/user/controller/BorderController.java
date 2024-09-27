@@ -3,9 +3,7 @@ package medicine.mite.user.controller;
 import lombok.extern.slf4j.Slf4j;
 import medicine.mite.chat.dto.MedicineDto;
 import medicine.mite.chat.entity.Medicines;
-import medicine.mite.chat.service.ChatService;
 import medicine.mite.user.entity.Users;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -80,7 +78,6 @@ public class BorderController {
         if (sessionUser != null) {
             String username = (String) session.getAttribute("username");
             model.addAttribute("username", username); // 모델에 사용자 이름 추가
-            log.info("indexPage에서 가져온 username: {}", username); // 로그 추가
         } else {
             redirectAttributes.addFlashAttribute("error", "사용자가 로그인되어 있지 않습니다.");
             return "redirect:/login";
