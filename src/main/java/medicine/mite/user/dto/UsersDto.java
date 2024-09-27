@@ -15,7 +15,7 @@ public class UsersDto {
     @NotEmpty(message = "이름은 필수 입력 값 입니다.")
     private String username;
     @NotEmpty(message = "전화번호는 필수 입력 값 입니다.")
-    @Length(min = 10, max = 11, message = "전화번호는 10자 이상, 11자 이하로 입력해주세요.")
+    @Length(min = 13, max = 14, message = "전화번호는 10자 이상, 11자 이하로 입력해주세요.")
     private String usernumber;
 
     private String confirmPassword;
