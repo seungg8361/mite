@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>홈 화면</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/indexstyle.css">
+</head>
+<body>
+<div class="container-fluid">
+  <nav class="navbar navbar-expand-lg navbar-light bg-white w-100">
+    <a class="navbar-brand">
+      <img src="/images/title.png" alt="약국맨" style="height: 50px;">
+    <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a th:href="@{/mypage}">
+            <img src="/images/myhome.png" style="margin-right: 50px; margin-top: 20px; height: 20px;">
+          </a>
+        </li>
+        <li class="nav-item">
+          <a th:href="@{/compare}">
+            <img src="/images/compare.png" style="margin-right: 50px; margin-top: 20px; height: 20px;">
+          </a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="search-container">
+    <form id="searchForm" method="get" th:action="@{/search}" class="search-form">
+      <input type="text" id="searchQuery" name="query" class="search-input" placeholder="🔍 약 이름을 검색해주세요" required>
+      <button type="submit" class="search-button">검색</button>
+    </form>
+  </div>
+
+  <h5 class="text-center mt-3 mb-3"><strong>약국맨에게 물어보세요!</strong></h5>
+  <div class="chat-container">
+    <div id="chat-box" class="chat-box"></div>
+    <div class="keyword-buttons">
+      <button type="button" class="btn keyword-button" onclick="submitKeyword('발열')">발열</button>
+      <button type="button" class="btn keyword-button" onclick="submitKeyword('두통')">두통</button>
+      <button type="button" class="btn keyword-button" onclick="submitKeyword('소화불량')">소화불량</button>
+      <button type="button" class="btn keyword-button" onclick="submitKeyword('두드러기')">두드러기</button>
+      <button type="button" class="btn keyword-button" onclick="submitKeyword('몸살')">몸살</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // 챗봇 초기 메시지 추가
+    const chatBox = document.querySelector('.chat-box');
+    const initialMessage = document.createElement('div');
+    initialMessage.className = 'chat-message bot';
+    initialMessage.textContent = `안녕하세요. [[${username}]]님, 약국맨입니다.\n아래의 증상 중 해당되는 증상 하나를 선택해주세요.`;
+    chatBox.appendChild(initialMessage);
+    chatBox.scrollTop = chatBox.scrollHeight; // 스크롤을 항상 아래로
+
+    // 검색 폼 이벤트 리스너 추가
+    const searchForm = document.querySelector('.search-form');
+    searchForm.addEventListener('submit', function(event) {
+      event.preventDefault(); // 폼 제출 기본 동작 방지
+
+      const searchInput = document.querySelector('.search-input').value;
+      if (searchInput) {
+        window.location.href = `/search?query=${encodeURIComponent(searchInput)}`;
+        fetchSearchResults(searchInput);
+      }
+    });
+    // 검색 결과를 가져오는 함수
+    function fetchSearchResults(query) {
+      fetch(`/search?query=${encodeURIComponent(query)}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+              .then(response => response.json())
+              .then(data => {
+                displaySearchResults(data);
+              })
+              .catch(error => console.error('Error:', error));
+    }
+  });
+
+  function submitKeyword(keyword) {
+    fetch('/chat/send-message', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ message: keyword })
+    })
+            .then(response => response.json())
+            .then(data => {
+              const chatBox = document.querySelector('.chat-box');
+              const userMessage = document.createElement('div');
+              userMessage.className = 'chat-message user';
+              userMessage.textContent = `${keyword}`;
+              chatBox.appendChild(userMessage);
+
+              if (data.info) {
+                const infoMessage = document.createElement('div');
+                infoMessage.className = 'chat-message bot';
+                chatBox.appendChild(infoMessage);
+                let i = 0;
+                const typingEffect = () => {
+                  if (i < data.info.length) {
+                    infoMessage.textContent += data.info.charAt(i);
+                    i++;
+                    setTimeout(typingEffect, 30);
+                  } else {
+                    if (data.medicines && data.medicines.length > 0) {
+                      const container = document.createElement('div');
+                      container.style.display = 'flex';
+                      container.style.flexWrap = 'wrap';
+                      container.style.gap = '10px';
+                      container.style.justifyContent = 'flex-start';
+
+                      data.medicines.forEach(medicine => {
+                        const medicineInfo = document.createElement('div');
+                        medicineInfo.className = 'chat-message bot';
+                        medicineInfo.style.display = 'flex';
+                        medicineInfo.style.flexDirection = 'column';
+                        medicineInfo.style.alignItems = 'center';
+                        medicineInfo.style.width = '150px';
+                        medicineInfo.style.margin = '10px';
+
+                        const image = document.createElement('img');
+                        image.src = medicine.image || 'https://via.placeholder.com/150';
+                        image.alt = medicine.name;
+                        image.style.width = '100px'; // 너비 지정
+                        image.style.height = '100px'; // 높이 지정
+                        image.style.objectFit = 'cover'; // 이미지 비율 유지하면서 잘림
+                        image.style.borderRadius = '8px'; // 필요에 따라 둥근 모서리 추가
+                        // 클릭 이벤트 리스너 추가
+                        image.addEventListener('click', () => {
+                          selectMedicine(medicine.name, medicine.image, medicine.price, medicine.ingredients, medicine.efficacy);
+                        });
+                        const name = document.createElement('span');
+                        name.textContent = medicine.name;
+                        name.style.textAlign = 'center';
+
+                        medicineInfo.appendChild(image);
+                        medicineInfo.appendChild(name);
+                        container.appendChild(medicineInfo);
+                      });
+
+                      chatBox.appendChild(container);
+                    }
+                  }
+                  chatBox.scrollTop = chatBox.scrollHeight; // 스크롤을 항상 아래로
+                };
+                typingEffect();
+              }
+            });
+  }
+
+  function selectMedicine(mname, mimage, price, ingredients, efficacy) {
+    fetch('/save-medicine-info', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        name: mname,
+        image: mimage,
+        price: price,
+        ingredients: ingredients,
+        efficacy: efficacy
+      })
+    }).then(response => {
+      if (response.ok) {
+        window.location.href = '/compare';
+      } else {
+        console.error('Error saving medicine info');
+      }
+    }).catch(error => {
+      console.error('Error:', error);
+    });
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MyPage</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background-color: #f8f9fa; /* 배경색 설정 */
+    }
+    #update {
+      max-width: 500px; /* 최대 너비 설정 */
+      margin: 50px auto; /* 상단 여백과 중앙 정렬 */
+      padding: 20px; /* 안쪽 여백 추가 */
+      background-color: white; /* 배경색 설정 */
+      border-radius: 5px; /* 모서리 둥글게 */
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* 그림자 효과 */
+    }
+  </style>
+</head>
+<body>
+<!-- 회원정보 수정 섹션 -->
+<div id="update" class="section">
+  <h2 class="mb-4">회원정보 수정</h2>
+  <form id="updateForm" th:action="@{/update}" method="post" th:object="${users}" onsubmit="return validatePasswords()">
+    <div class="mb-3">
+      <label for="userid" class="form-label">아이디</label>
+      <input type="text" class="form-control" id="userid" name="userid" th:value="${session.userkey.userid}" readonly>
+    </div>
+    <div class="mb-3">
+      <label for="userpw" class="form-label">비밀번호</label>
+      <input type="password" class="form-control" id="userpw" name="userpw" placeholder="비밀번호를 입력하세요" th:field="*{userpw}">
+    </div>
+    <div class="mb-3">
+      <label for="confirmPassword" class="form-label">비밀번호 확인</label>
+      <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" placeholder="비밀번호를 다시 입력하세요">
+    </div>
+    <div class="mb-3">
+      <label for="username" class="form-label">이름</label>
+      <input type="text" class="form-control" id="username" name="username" placeholder="이름을 입력하세요" th:field="*{username}" th:value="${users.username}">
+    </div>
+    <div class="mb-3">
+      <label for="usernumber" class="form-label">전화번호</label>
+      <input type="tel" class="form-control" id="usernumber" name="usernumber" placeholder="전화번호를 입력하세요" th:field="*{usernumber}" th:value="${users.usernumber}">
+    </div>
+    <button type="submit" class="btn btn-primary">정보 수정</button>
+  </form>
+</div>
+<script>
+  function validatePasswords() {
+    const userpw = document.getElementById('userpw').value;
+    const confirmPassword = document.getElementById('confirmPassword').value;
+
+    if (userpw !== confirmPassword) {
+      alert('비밀번호가 일치하지 않습니다.');
+      return false; // 폼 제출 방지
+    }
+    return true; // 비밀번호 일치 시 폼 제출
+  }
+</script>
+</body>
+</html>

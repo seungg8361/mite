@@ -3,8 +3,6 @@ HELP.md
 build/
 
 src/main/resources/application-dev.yml
-src/main/resources/static/
-src/main/resources/templates/
 
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
