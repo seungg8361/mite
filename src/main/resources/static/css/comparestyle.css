@@ -1,0 +1,51 @@
+body::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url('/images/comparebackground.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    opacity: 0.6;
+    z-index: -1;
+    filter: saturate(0.5) brightness(0.94); /* 채도와 밝기를 동시에 조절 */
+}
+.warning-text {
+    color: red;
+    font-weight: bold;
+}
+footer a { text-decoration: none !important; }
+
+/* 테이블 스타일 */
+.table {
+    border-collapse: collapse;
+    margin-top: 20px;
+    width: 100%; /* 테이블 너비를 100%로 설정 */
+}
+.table th, .table td {
+    text-align: center; /* 가로 정렬 */
+    vertical-align: middle; /* 세로 정렬 */
+    padding: 10px;
+    border: 2px solid #4caf50; /* 테두리 색상 */
+}
+.table th {
+    background-color: #82b9f3; /* 헤더 배경색 */
+    color: white; /* 헤더 글자색 */
+    font-weight: bold;
+}
+.table tr:nth-child(even) {
+    background-color: #f2f2f2; /* 짝수 행 배경색 */
+}
+.table tr:hover {
+    background-color: #d3f6ce; /* 마우스 오버 시 색상 */
+}
+.table tr th {
+    font-size: 18px;
+    font-weight: bold;
+    color: white;
+    background-color: #5fac65;
+    border: 2px solid #0d5c10;
+}

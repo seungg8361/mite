@@ -17,7 +17,6 @@
 </div>
 
 <div id="profile" class="section profile-section" style="text-align: center;">
-  <!--<p style="font-size: 30px; margin-top: 20px;" th:text="'안녕하세요, ' + ${session.userkey.username} + '님'"></p>-->
   <h1>내 정보</h1>
   <div style="text-align: left; margin-left: 20px; width: auto; margin-top: 70px;">
     <p style="margin: 40px">
@@ -35,43 +34,43 @@
   </div>
   <button style="margin-top: 100px;" class="delete-btn" onclick="showDeleteConfirmation()">회원 탈퇴</button>
 </div>
-  <div id="deleteConfirmation" class="centered-form" style="display: none;">
-    <h2 class="text-center mb-4">회원 탈퇴 확인</h2>
-    <form action="/delete" method="post" id="deleteForm" onsubmit="showModal(event)">
-      <input type="hidden" name="_method" value="delete" />
+<div id="deleteConfirmation" class="centered-form" style="display: none;">
+  <h2 class="text-center mb-4">회원 탈퇴 확인</h2>
+  <form action="/delete" method="post" id="deleteForm" onsubmit="showModal(event)">
+    <input type="hidden" name="_method" value="delete" />
+    <div class="mb-3">
+      <label for="userpw">비밀번호를 입력하세요.</label>
+      <input type="password" id="userpw" name="userpw" placeholder="비밀번호를 입력하세요." required class="form-control">
+    </div>
+    <button type="submit" class="btn btn-danger" onclick="deleteUsers()">회원 탈퇴</button>
+    <button type="button" class="btn btn-secondary" onclick="hideDeleteConfirmation()">취소</button>
+  </form>
+</div>
+<div id="recentMedicines" class="section recent-medicines-section" style="display: none;">
+  <h1>최근에 본 약</h1>
+  <div style="margin-top: 70px" th:block th:if="${not #lists.isEmpty(recentMedicines)}">
+    <ul style="list-style-type: decimal; display: flex; flex-wrap: wrap; padding: 15px;">
+      <li th:each="medicine : ${recentMedicines}" style="margin-right: 30px; margin-bottom: 40px;">
+        <img th:src="${medicine.mimage}" alt="약 이미지" width="100" height="100" style="object-fit: cover;" />
+        <p class="custom-font" th:text="${medicine.mname}"></p>
+      </li>
+    </ul>
+  </div>
+  <div th:if="${recentMedicines == null || #lists.isEmpty(recentMedicines)}">
+    <p>최근에 본 약이 없습니다.</p>
+  </div>
+</div>
+<div id="userupdate" class="section" style="display: none;">
+  <div class="centered-form">
+    <h2 class="text-center mb-4">비밀번호 확인</h2>
+    <form id="checkPwdForm" action="/mypage" method="post" class="text-center" onsubmit="showModal(event)">
       <div class="mb-3">
-        <label for="userpw">비밀번호를 입력하세요.</label>
-        <input type="password" id="userpw" name="userpw" placeholder="비밀번호를 입력하세요." required class="form-control">
+        <input type="password" id="password" name="userpw" placeholder="비밀번호를 입력하세요." required class="form-control">
       </div>
-      <button type="submit" class="btn btn-danger" onclick="deleteUsers()">회원 탈퇴</button>
-      <button type="button" class="btn btn-secondary" onclick="hideDeleteConfirmation()">취소</button>
+      <button type="submit" class="btn btn-primary">확인</button>
     </form>
   </div>
-  <div id="recentMedicines" class="section recent-medicines-section" style="display: none;">
-    <h1>최근에 본 약</h1>
-    <div style="margin-top: 70px" th:block th:if="${not #lists.isEmpty(recentMedicines)}">
-      <ul style="list-style-type: decimal; display: flex; flex-wrap: wrap; padding: 15px;">
-        <li th:each="medicine : ${recentMedicines}" style="margin-right: 30px; margin-bottom: 40px;">
-          <img th:src="${medicine.mimage}" alt="약 이미지" width="100" height="100" style="object-fit: cover;" />
-          <p class="custom-font" th:text="${medicine.mname}"></p>
-        </li>
-      </ul>
-    </div>
-    <div th:if="${recentMedicines == null || #lists.isEmpty(recentMedicines)}">
-      <p>최근에 본 약이 없습니다.</p>
-    </div>
-  </div>
-  <div id="userupdate" class="section" style="display: none;">
-    <div class="centered-form">
-      <h2 class="text-center mb-4">비밀번호 확인</h2>
-      <form id="checkPwdForm" action="/mypage" method="post" class="text-center" onsubmit="showModal(event)">
-        <div class="mb-3">
-          <input type="password" id="password" name="userpw" placeholder="비밀번호를 입력하세요." required class="form-control">
-        </div>
-        <button type="submit" class="btn btn-primary">확인</button>
-      </form>
-    </div>
-  </div>
+</div>
 </div>
 <!-- 모달 구조 -->
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">

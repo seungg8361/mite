@@ -42,7 +42,9 @@
     </div>
     <div class="mb-3">
       <label for="usernumber" class="form-label">전화번호</label>
-      <input type="tel" class="form-control" id="usernumber" name="usernumber" placeholder="전화번호를 입력하세요" th:field="*{usernumber}" th:value="${users.usernumber}">
+      <input type="tel" id="usernumber" class="form-control" th:field="*{usernumber}" placeholder="전화번호를 입력해주세요"
+             pattern="^\d{3}-\d{4}-\d{4}$" title="전화번호는 숫자만 입력할 수 있으며, 10자리 또는 11자리여야 합니다." autocomplete="off" required
+             oninput="formatPhoneNumber(this)">
     </div>
     <button type="submit" class="btn btn-primary">정보 수정</button>
   </form>
@@ -58,6 +60,27 @@
     }
     return true; // 비밀번호 일치 시 폼 제출
   }
+
+  function formatPhoneNumber(input) {
+    // 숫자만 필터링
+    let value = input.value.replace(/\D/g, '');
+
+    // 하이픈 추가
+    if (value.length > 10) {
+      input.value = value.replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3');
+    } else if (value.length > 7) {
+      input.value = value.replace(/(\d{3})(\d{4})/, '$1-$2');
+    } else if (value.length > 3) {
+      input.value = value.replace(/(\d{3})/, '$1');
+    } else {
+      input.value = value;
+    }
+  }
+
+  // 페이지가 로드될 때 현재 URL의 상태를 변경
+  window.onload = function() {
+    window.history.replaceState(null, document.title, window.location.href);
+  };
 </script>
 </body>
 </html>

@@ -1,5 +1,7 @@
 package medicine.mite.user.controller;
 
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,19 +25,22 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping("/signup")
-    public String signupForm(Model model) {
+    public String signupPage(HttpSession session, Model model) {
+        // usersDto 객체 초기화
         model.addAttribute("usersDto", new UsersDto());
-        return "signup";
+        return "signup"; // 회원가입 페이지로 이동
     }
     @PostMapping("/signup")
-    public String signupSubmit(@Validated UsersDto usersDto, Model model) {
+    public String signupSubmit(@Validated UsersDto usersDto, Model model, HttpSession session) {
         try {
             Users user = Users.createUsers(usersDto);
             userService.saveUsers(user);
+            session.setAttribute("userkey", user);
         } catch (IllegalStateException e) {
             model.addAttribute("error", "이미 존재하는 계정입니다.");
             return "signup";
         }
+        // 회원가입 성공 후 로그인 페이지로 리다이렉트
         return "redirect:/login";
     }
     @GetMapping("/login")
@@ -65,7 +70,10 @@ public class UserController {
             if (usersinfo.isPresent()) {
                 Users user = usersinfo.get(); // 실제 Users 객체를 가져옴
                 session.setAttribute("userkey", user);
+                session.setAttribute("userid", user.getUserid());
                 session.setAttribute("username", user.getUsername());
+                // 새로운 로그인 시 이전 세션 데이터 초기화
+                session.removeAttribute("recentMedicines");
                 return "redirect:/index"; // index 페이지로 리다이렉트
             } else {
                 // 사용자를 찾을 수 없는 경우에도 로그인 페이지로 돌아감
@@ -80,9 +88,14 @@ public class UserController {
     }
     @GetMapping("/logout")
     public String logout(HttpSession session) {
-        session.invalidate();
-        return "redirect:/login";
+        Users user = (Users) session.getAttribute("userkey");
+        if (user != null) {
+            session.removeAttribute("recentMedicines"); // 해당 사용자 약 정보 삭제
+        }
+        session.invalidate(); // 세션 무효화
+        return "redirect:/login"; // 로그인 페이지로 리다이렉트
     }
+
     @PostMapping("/mypage")
     public String checkPassword(@RequestParam("userpw") String userpw, HttpSession session, Model model, RedirectAttributes redirectAttributes) {
         Users currentUser = (Users) session.getAttribute("userkey");
@@ -97,7 +110,7 @@ public class UserController {
         return "redirect:/mypage"; // 비밀번호가 틀리면 다시 마이페이지로
     }
     @PostMapping("/update")
-    public String updateUser(@ModelAttribute UsersDto usersDto, HttpSession session, Model model) {
+    public String updateUser(@ModelAttribute UsersDto usersDto, HttpSession session, Model model, RedirectAttributes redirectAttributes) {
         Users currentUser = (Users) session.getAttribute("userkey");
         if (currentUser != null) {
             // 비밀번호 확인
@@ -107,12 +120,18 @@ public class UserController {
             }
             // 사용자 정보 업데이트
             userService.updateUser(usersDto, currentUser);
-            // 비밀번호 업데이트
-            currentUser.setUserpw(usersDto.getUserpw());
+            // 비밀번호 업데이트 (비밀번호가 변경된 경우에만)
+            if (!usersDto.getUserpw().isEmpty()) {
+                currentUser.setUserpw(usersDto.getUserpw());
+            }
             session.setAttribute("userkey", currentUser);
-            session.setAttribute("success", "회원정보가 성공적으로 수정되었습니다.");
+            redirectAttributes.addFlashAttribute("success", "회원 정보가 수정되었습니다.");
+            // 업데이트 후 마이페이지로 리다이렉트
+            return "redirect:/mypage";
         }
-        return "redirect:/mypage"; // 업데이트 후 리다이렉트할 페이지
+        // 현재 사용자가 없을 경우 처리
+        model.addAttribute("error", "사용자가 로그인되어 있지 않습니다.");
+        return "redirect:/login"; // 로그인 페이지로 리다이렉트
     }
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
     public String deleteUser(@ModelAttribute UsersDto usersDto, HttpSession session, RedirectAttributes redirectAttributes) {
