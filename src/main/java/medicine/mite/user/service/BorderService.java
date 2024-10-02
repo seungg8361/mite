@@ -36,7 +36,6 @@ public class BorderService {
             return "이미 추가된 약입니다.";
         }
     }
-
     public List<Medicines> getRecentMedicines(String userId, HttpSession session) {
         return (List<Medicines>) session.getAttribute("recentMedicines_" + userId);
     }

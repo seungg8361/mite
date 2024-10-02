@@ -1,7 +1,4 @@
 package medicine.mite.user.controller;
-
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,7 +22,7 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping("/signup")
-    public String signupPage(HttpSession session, Model model) {
+    public String signupPage(Model model) {
         // usersDto 객체 초기화
         model.addAttribute("usersDto", new UsersDto());
         return "signup"; // 회원가입 페이지로 이동
