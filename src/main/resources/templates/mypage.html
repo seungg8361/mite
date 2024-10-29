@@ -9,6 +9,24 @@
   <link rel="stylesheet" href="/css/mypagestyle.css">
 </head>
 <body>
+<div class="container-fluid">
+  <nav class="navbar navbar-expand-lg navbar-light bg-white w-120">
+      <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a th:href="@{/index}">
+              <img src="/images/title.png" style="margin-right: 50px; margin-top: 20px; height: 20px;">
+            </a>
+          </li>
+          <li class="nav-item">
+            <a th:href="@{/compare}">
+              <img src="/images/compare.png" style="margin-right: 50px; margin-top: 20px; height: 20px;">
+            </a>
+          </li>
+        </ul>
+      </div>
+    </a>
+  </nav>
 <div id="sidebar">
   <img src="/images/myhome2.png" style="height: 50px; margin-left: 20px">
   <a style="margin-top: 20px" href="#" onclick="showSection('profile')">프로필</a>
@@ -46,7 +64,7 @@
     <button type="button" class="btn btn-secondary" onclick="hideDeleteConfirmation()">취소</button>
   </form>
 </div>
-<div id="recentMedicines" class="section recent-medicines-section" style="display: none;">
+<div id="recentMedicines" class="section recent-medicines-section" style="display: none; margin-top: 50px">
   <h1>최근에 본 약</h1>
   <div style="margin-top: 70px" th:block th:if="${not #lists.isEmpty(recentMedicines)}">
     <ul style="list-style-type: decimal; display: flex; flex-wrap: wrap; padding: 15px;">
@@ -60,7 +78,7 @@
     <p>최근에 본 약이 없습니다.</p>
   </div>
 </div>
-<div id="userupdate" class="section" style="display: none;">
+<div id="userupdate" class="section" style="display: none; margin-top: 100px">
   <div class="centered-form">
     <h2 class="text-center mb-4">비밀번호 확인</h2>
     <form id="checkPwdForm" action="/mypage" method="post" class="text-center" onsubmit="showModal(event)">

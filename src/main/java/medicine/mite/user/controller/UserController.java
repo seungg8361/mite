@@ -83,10 +83,6 @@ public class UserController {
     }
     @GetMapping("/logout")
     public String logout(HttpSession session) {
-        Users user = (Users) session.getAttribute("userkey");
-        if (user != null) {
-            session.removeAttribute("recentMedicines"); // 해당 사용자 약 정보 삭제
-        }
         session.invalidate(); // 세션 무효화
         return "redirect:/login"; // 로그인 페이지로 리다이렉트
     }
