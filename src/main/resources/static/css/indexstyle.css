@@ -2,10 +2,11 @@
 body::before {
     content: '';
     position: absolute;
-    top: 0;
+    top: 56px;
     left: 0;
     right: 0;
     bottom: 0;
+    height: 100vh;
     background-image: url('/images/background.jpg'); /* 여기에 이미지 URL을 입력하세요 */
     background-size: cover; /* 배경 이미지를 화면 전체에 맞춤 */
     background-position: center; /* 배경 이미지 중앙 정렬 */

@@ -35,11 +35,11 @@
   <button style="margin-top: 100px;" class="delete-btn" onclick="showDeleteConfirmation()">회원 탈퇴</button>
 </div>
 <div id="deleteConfirmation" class="centered-form" style="display: none;">
-  <h2 class="text-center mb-4">회원 탈퇴 확인</h2>
+  <h2 class="text-center">회원 탈퇴 확인</h2>
   <form action="/delete" method="post" id="deleteForm" onsubmit="showModal(event)">
     <input type="hidden" name="_method" value="delete" />
     <div class="mb-3">
-      <label for="userpw">비밀번호를 입력하세요.</label>
+      <label for="userpw"></label>
       <input type="password" id="userpw" name="userpw" placeholder="비밀번호를 입력하세요." required class="form-control">
     </div>
     <button type="submit" class="btn btn-danger" onclick="deleteUsers()">회원 탈퇴</button>

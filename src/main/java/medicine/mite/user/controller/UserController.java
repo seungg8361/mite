@@ -2,7 +2,6 @@ package medicine.mite.user.controller;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import medicine.mite.chat.entity.Medicines;
 import medicine.mite.user.dto.UsersDto;
 import medicine.mite.user.entity.Users;import medicine.mite.user.service.UserService;
 import org.springframework.stereotype.Controller;
@@ -11,7 +10,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -93,18 +91,10 @@ public class UserController {
         return "redirect:/login"; // 로그인 페이지로 리다이렉트
     }
 
-    @PostMapping("/mypage")
-    public String checkPassword(@RequestParam("userpw") String userpw, HttpSession session, Model model, RedirectAttributes redirectAttributes) {
-        Users currentUser = (Users) session.getAttribute("userkey");
-        // 비밀번호 확인
-        if (currentUser != null && userpw.equals(currentUser.getUserpw())) {
-            return "redirect:/userupdate"; // 비밀번호가 일치하면 회원정보 수정 페이지로 이동
-        }
-        // 비밀번호가 틀리면 에러 메시지 추가
-        redirectAttributes.addFlashAttribute("error", "비밀번호가 맞지 않습니다.");
-        List<Medicines> recentMedicines = (List<Medicines>) session.getAttribute("recentMedicines");
-        model.addAttribute("recentMedicines", recentMedicines);
-        return "redirect:/mypage"; // 비밀번호가 틀리면 다시 마이페이지로
+    @GetMapping("/userupdate")
+    public String userUpdatePage(Model model, Users users) {
+        model.addAttribute("users", users);
+        return "userupdate";
     }
     @PostMapping("/update")
     public String updateUser(@ModelAttribute UsersDto usersDto, HttpSession session, Model model, RedirectAttributes redirectAttributes) {
@@ -124,7 +114,8 @@ public class UserController {
             session.setAttribute("userkey", currentUser);
             redirectAttributes.addFlashAttribute("success", "회원 정보가 수정되었습니다.");
             // 업데이트 후 마이페이지로 리다이렉트
-            return "redirect:/mypage";
+            session.invalidate();
+            return "redirect:/login";
         }
         // 현재 사용자가 없을 경우 처리
         model.addAttribute("error", "사용자가 로그인되어 있지 않습니다.");

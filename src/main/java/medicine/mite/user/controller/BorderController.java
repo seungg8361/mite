@@ -66,13 +66,19 @@ public class BorderController {
         model.addAttribute("recentMedicines", recentMedicines);
         return "mypage";
     }
-
-    @GetMapping("/userupdate")
-    public String userUpdatePage(Model model, Users users) {
-        model.addAttribute("users", users);
-        return "userupdate";
+    @PostMapping("/mypage")
+    public String checkPassword(@RequestParam("userpw") String userpw, HttpSession session, Model model, RedirectAttributes redirectAttributes) {
+        Users currentUser = (Users) session.getAttribute("userkey");
+        // 비밀번호 확인
+        if (currentUser != null && userpw.equals(currentUser.getUserpw())) {
+            return "redirect:/userupdate"; // 비밀번호가 일치하면 회원정보 수정 페이지로 이동
+        }
+        // 비밀번호가 틀리면 에러 메시지 추가
+        redirectAttributes.addFlashAttribute("error", "비밀번호가 맞지 않습니다.");
+        List<Medicines> recentMedicines = (List<Medicines>) session.getAttribute("recentMedicines");
+        model.addAttribute("recentMedicines", recentMedicines);
+        return "redirect:/mypage"; // 비밀번호가 틀리면 다시 마이페이지로
     }
-
     @GetMapping("/index")
     public String indexPage(HttpSession session, RedirectAttributes redirectAttributes, Model model) {
         Users sessionUser = (Users) session.getAttribute("userkey");

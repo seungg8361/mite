@@ -6,8 +6,18 @@
 .delete-btn:hover {background-color: darkred;}
 .centered-form {max-width: 400px;margin: 0 auto;padding: 20px;background-color: white;border-radius: 5px;box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);}
 .profile-section, .recent-medicines-section {max-width: 600px;margin: 20px auto;padding: 20px;background-color: white;border-radius: 5px;box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);}
-#deleteConfirmation {display: none; /* 초기에는 숨김 */margin-top: 20px;}
-/* 사이드바 스타일 */
+#deleteConfirmation {
+    display: none; /* 기본적으로 숨김 */
+    position: fixed; /* 화면에 고정 */
+    top: 50%; /* 화면의 중간 위치 */
+    left: 50%; /* 화면의 중간 위치 */
+    transform: translate(-50%, -50%); /* 중앙 정렬을 위한 변환 */
+    background-color: white; /* 배경색 */
+    padding: 20px; /* 패딩 추가 */
+    border-radius: 8px; /* 모서리 둥글게 */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* 그림자 추가 */
+    z-index: 1000; /* 다른 콘텐츠 위에 표시 */
+}/* 사이드바 스타일 */
 #sidebar {
     width: 250px;
     height: 100vh;
@@ -62,6 +72,7 @@ body::before {
     left: 0;
     right: 0;
     bottom: 0;
+    height: 100vh;
     background-image: url('/images/mypagebackground.jpg'); /* 여기에 이미지 URL을 입력하세요 */
     background-size: cover; /* 배경 이미지를 화면 전체에 맞춤 */
     background-position: center; /* 배경 이미지 중앙 정렬 */
