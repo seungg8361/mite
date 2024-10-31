@@ -41,14 +41,17 @@
       <span>아이디 : </span>
       <strong th:text="${session.userkey.userid}"></strong>
     </p>
+    <hr>
     <p style="margin: 40px">
       <span>이름 : </span>
       <strong th:text="${session.userkey.username}"></strong>
     </p>
+    <hr>
     <p style="margin: 40px">
       <span>전화번호 : </span>
       <strong th:text="${session.userkey.usernumber}"></strong>
     </p>
+    <hr>
   </div>
   <button style="margin-top: 100px;" class="delete-btn" onclick="showDeleteConfirmation()">회원 탈퇴</button>
 </div>
