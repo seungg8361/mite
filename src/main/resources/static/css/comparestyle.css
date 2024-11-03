@@ -40,7 +40,7 @@ footer a { text-decoration: none !important; }
 .table tr:nth-child(even) {
     background-color: #f2f2f2; /* 짝수 행 배경색 */
 }
-.table tr:hover {
+.table td:hover {
     background-color: #d3f6ce; /* 마우스 오버 시 색상 */
 }
 .table tr th {

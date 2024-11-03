@@ -14,7 +14,7 @@
       <img src="/images/logout.png" alt="로그아웃" style="height: 20px; margin-left: 50px; margin-top: 15px;">
     </a>
     <a class="navbar-brand">
-      <img src="/images/title.png" alt="약국맨" style="height: 50px;">
+      <img src="/images/title.png" alt="약국맨" style="height: 50px; margin-bottom: 5px">
       <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
         <ul class="navbar-nav">
           <li class="nav-item">
@@ -35,11 +35,11 @@
   <div class="search-container">
     <form id="searchForm" method="get" th:action="@{/search}" class="search-form">
       <input type="text" id="searchQuery" name="query" class="search-input" placeholder="🔍 약 이름을 검색해주세요" required>
-      <button type="submit" class="search-button">검색</button>
+      <button type="submit" class="search-button" style="font-weight: bold">검색</button>
     </form>
   </div>
 
-  <h5 class="text-center mt-3 mb-3"><strong>약국맨에게 물어보세요!</strong></h5>
+  <h4 class="text-center mt-3 mb-3"><strong>약국맨에게 물어보세요!</strong></h4>
   <div class="chat-container">
     <div id="chat-box" class="chat-box"></div>
     <div class="keyword-buttons">

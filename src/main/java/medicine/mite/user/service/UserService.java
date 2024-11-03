@@ -25,14 +25,13 @@ public class UserService {
         return userRepository.findByUserid(userid);
     }
     public Users saveUsers(Users users) {
-        validateSignup(users);
-        return userRepository.save(users);
-    }
-    public void validateSignup(Users users) {
+        // 사용자 ID 중복 검사
         Optional<Users> findUsers = userRepository.findByUserid(users.getUserid());
         if (findUsers.isPresent()) {
             throw new IllegalStateException("이미 가입된 회원입니다.");
         }
+        // 유효성 검사를 통과한 사용자 저장
+        return userRepository.save(users);
     }
     public String validateLogin(UsersDto usersDto) {
         Optional<Users> findUser = userRepository.findByUserid(usersDto.getUserid());

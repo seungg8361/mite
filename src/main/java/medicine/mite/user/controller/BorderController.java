@@ -22,16 +22,10 @@ public class BorderController {
     private final BorderService borderService;
 
     @PostMapping("/save-medicine-info")
-    public String saveMedicineInfo(@RequestBody MedicineDto medicineDto, HttpSession session, RedirectAttributes redirectAttributes) {
+    public String saveMedicineInfo(@RequestBody MedicineDto medicineDto, HttpSession session) {
         Users sessionUser = (Users) session.getAttribute("userkey");
-        if (sessionUser == null) {
-            redirectAttributes.addFlashAttribute("error", "사용자가 로그인되어 있지 않습니다.");
-            return "redirect:/login";
-        }
-
         String userId = sessionUser.getUserid();
-        String message = borderService.saveMedicineInfo(medicineDto, userId, session);
-        redirectAttributes.addFlashAttribute(message.contains("성공") ? "success" : "error", message);
+        borderService.saveMedicineInfo(medicineDto, userId, session);
         return "redirect:/compare";
     }
 

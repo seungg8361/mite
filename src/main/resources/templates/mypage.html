@@ -36,24 +36,25 @@
 
 <div id="profile" class="section profile-section" style="text-align: center;">
   <h1>내 정보</h1>
-  <div style="text-align: left; margin-left: 20px; width: auto; margin-top: 70px;">
-    <p style="margin: 40px">
+  <hr>
+  <div style="text-align: left; margin-left: 20px; margin-right: 20px; width: auto; margin-top: 30px;">
+    <p style="margin: 30px">
       <span>아이디 : </span>
       <strong th:text="${session.userkey.userid}"></strong>
     </p>
     <hr>
-    <p style="margin: 40px">
+    <p style="margin: 30px">
       <span>이름 : </span>
       <strong th:text="${session.userkey.username}"></strong>
     </p>
     <hr>
-    <p style="margin: 40px">
+    <p style="margin: 30px">
       <span>전화번호 : </span>
       <strong th:text="${session.userkey.usernumber}"></strong>
     </p>
     <hr>
   </div>
-  <button style="margin-top: 100px;" class="delete-btn" onclick="showDeleteConfirmation()">회원 탈퇴</button>
+  <button style="margin-top: 20px; font-weight: bold" class="delete-btn" onclick="showDeleteConfirmation()">회원 탈퇴</button>
 </div>
 <div id="deleteConfirmation" class="centered-form" style="display: none;">
   <h2 class="text-center">회원 탈퇴 확인</h2>
@@ -68,17 +69,17 @@
   </form>
 </div>
 <div id="recentMedicines" class="section recent-medicines-section" style="display: none; margin-top: 50px">
-  <h1>최근에 본 약</h1>
-  <div style="margin-top: 70px" th:block th:if="${not #lists.isEmpty(recentMedicines)}">
+  <h1>최근 본 약</h1>
+  <div style="margin-top: 70px">
     <ul style="list-style-type: decimal; display: flex; flex-wrap: wrap; padding: 15px;">
       <li th:each="medicine : ${recentMedicines}" style="margin-right: 30px; margin-bottom: 40px;">
         <img th:src="${medicine.mimage}" alt="약 이미지" width="100" height="100" style="object-fit: cover;" />
-        <p class="custom-font" th:text="${medicine.mname}"></p>
+        <p th:text="${medicine.mname}"></p>
       </li>
     </ul>
   </div>
   <div th:if="${recentMedicines == null || #lists.isEmpty(recentMedicines)}">
-    <p>최근에 본 약이 없습니다.</p>
+    <p>최근 본 약이 없습니다.</p>
   </div>
 </div>
 <div id="userupdate" class="section" style="display: none; margin-top: 100px">
@@ -88,7 +89,7 @@
       <div class="mb-3">
         <input type="password" id="password" name="userpw" placeholder="비밀번호를 입력하세요." required class="form-control">
       </div>
-      <button type="submit" class="btn btn-primary">확인</button>
+      <button type="submit" style="font-weight: bold" class="btn btn-primary">확인</button>
     </form>
   </div>
 </div>

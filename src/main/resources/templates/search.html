@@ -74,7 +74,7 @@
       </div>
     `;
     pharmacy.drugs.forEach(drug => {
-      pharmacyDetails.innerHTML += `<p><img src="${drug.dimage}" style="width: 100px; height: 100px; border-radius: 5px; margin-right: 10px;"></p>
+      pharmacyDetails.innerHTML += `<p><img src="${drug.dimage}" style="width: 90px; height: 70px; border-radius: 10px; margin-right: 10px;"></p>
                                     <p><strong>${drug.dname}</strong> / <strong>${drug.quantity} 개</strong></p>`;
     });
     // 사이드바를 항상 보여주도록 수정

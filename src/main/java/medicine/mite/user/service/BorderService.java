@@ -20,7 +20,6 @@ public class BorderService {
         if (recentMedicines == null) {
             recentMedicines = new ArrayList<>();
         }
-
         // 중복 확인
         if (recentMedicines.stream().noneMatch(m -> m.getMimage().equals(medicineDto.getImage()))) {
             Medicines medicine = new Medicines();
@@ -31,10 +30,8 @@ public class BorderService {
             medicine.setEfficacy(medicineDto.getEfficacy());
             recentMedicines.add(medicine);
             session.setAttribute("recentMedicines_" + userId, recentMedicines);
-            return "약 정보가 성공적으로 추가되었습니다.";
-        } else {
-            return "이미 추가된 약입니다.";
         }
+    return null;
     }
     public List<Medicines> getRecentMedicines(String userId, HttpSession session) {
         return (List<Medicines>) session.getAttribute("recentMedicines_" + userId);

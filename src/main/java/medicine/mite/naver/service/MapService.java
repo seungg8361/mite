@@ -22,8 +22,6 @@ public class MapService {
             String coordinates = longitude + "," + latitude;
             // Nearby Search API URL
             String apiUrl = "https://naveropenapi.apigw.ntruss.com/map-place/v1/search?coordinate=" + coordinates;
-            // 로깅 추가
-            log.debug("Request URL: {}", apiUrl);
 
             HttpHeaders headers = new HttpHeaders();
             headers.set("X-NCP-APIGW-API-KEY-ID", clientId);
@@ -31,19 +29,11 @@ public class MapService {
 
             HttpEntity<String> entity = new HttpEntity<>(headers);
             RestTemplate restTemplate = new RestTemplate();
-
             // API 요청 보내기
             ResponseEntity<String> response = restTemplate.exchange(apiUrl, HttpMethod.GET, entity, String.class);
-
-            // 로깅 추가
-            log.debug("Response Status Code: {}", response.getStatusCode());
-            log.debug("Response Body: {}", response.getBody());
-
             // 응답 처리
             if (response.getStatusCode() == HttpStatus.OK) {
                 return response.getBody();
-            } else {
-                log.error("Failed to get a valid response from Naver API, Status code: {}", response.getStatusCode());
             }
         } catch (Exception e) {
             log.error("Error during search for coordinates: {}, Error: {}", latitude + "," + longitude, e.getMessage());

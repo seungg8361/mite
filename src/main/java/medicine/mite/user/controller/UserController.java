@@ -26,39 +26,27 @@ public class UserController {
         return "signup"; // 회원가입 페이지로 이동
     }
     @PostMapping("/signup")
-    public String signupSubmit(@Validated UsersDto usersDto, Model model, HttpSession session) {
+    public String signupSubmit(@Validated UsersDto usersDto, Model model, HttpSession session, RedirectAttributes redirectAttributes) {
         try {
             Users user = Users.createUsers(usersDto);
             userService.saveUsers(user);
             session.setAttribute("userkey", user);
-        } catch (IllegalStateException e) {
+        } catch (Exception e) {
             model.addAttribute("error", "이미 존재하는 계정입니다.");
             return "signup";
         }
         // 회원가입 성공 후 로그인 페이지로 리다이렉트
+        redirectAttributes.addFlashAttribute("success", "회원가입에 성공하였습니다.");
         return "redirect:/login";
     }
     @GetMapping("/login")
-    public String loginPage(Model model, HttpSession session) {
-        // 세션에서 성공 메시지 가져오기
-        String successMessage = (String) session.getAttribute("success");
-        if (successMessage != null) {
-            model.addAttribute("success", successMessage);
-            // 성공 메시지를 세션에서 제거
-            session.removeAttribute("success");
-        }
+    public String loginPage(Model model) {
         // usersDto 객체를 모델에 추가
         model.addAttribute("usersDto", new UsersDto());
         return "login"; // 로그인 페이지로 이동
     }
     @PostMapping("/login")
     public String loginSubmit(@ModelAttribute UsersDto usersDto, HttpSession session, Model model) {
-        // 현재 세션에 저장된 success 메시지를 확인
-        String successMessage = (String) session.getAttribute("success");
-        if (successMessage != null) {
-            model.addAttribute("success", successMessage);
-            session.removeAttribute("success"); // 메시지 표시 후 제거
-        }
         String message = userService.validateLogin(usersDto);
         if (message.startsWith("환영합니다")) {
             Optional<Users> usersinfo = userService.findByUserid(usersDto.getUserid());
@@ -70,11 +58,7 @@ public class UserController {
                 // 새로운 로그인 시 이전 세션 데이터 초기화
                 session.removeAttribute("recentMedicines");
                 return "redirect:/index"; // index 페이지로 리다이렉트
-            } else {
-                // 사용자를 찾을 수 없는 경우에도 로그인 페이지로 돌아감
-                model.addAttribute("error", "사용자를 찾을 수 없습니다.");
-                return "login"; // 사용자 정보를 찾을 수 없을 때 로그인 페이지로 이동
-            }
+            }else{return "login";}
         } else {
             // 로그인 실패 시 에러 메시지 전달
             model.addAttribute("error", message);

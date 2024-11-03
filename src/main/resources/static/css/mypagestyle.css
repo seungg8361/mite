@@ -51,6 +51,7 @@
     width: 100%;
     transition: background-color 0.3s ease;
     font-family: 'Roboto', sans-serif; /* 폰트 설정 */
+    font-weight: bold;
 }
 
 /* 링크 hover 시 효과 */
@@ -92,5 +93,12 @@ body::before {
     vertical-align: middle; /* 세로 정렬 */
     padding: 10px;
 }
-#profile div p strong { font-size: 30px; text-align: center; }
+#recentMedicines li:hover img {
+    width: 130px;
+    height: 130px;
+}
+#recentMedicines li:hover p {
+    font-weight: bold;
+    background-color: lightgoldenrodyellow;
+}#profile div p strong { font-size: 30px; text-align: center; }
 #profile div p span { font-size: 20px; }
