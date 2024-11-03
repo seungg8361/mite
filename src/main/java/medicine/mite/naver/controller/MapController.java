@@ -1,8 +1,8 @@
 package medicine.mite.naver.controller;
 
 import lombok.extern.slf4j.Slf4j;
-import medicine.mite.naver.entity.Pharmacy;
-import medicine.mite.naver.service.PharmacyService;
+import medicine.mite.pharmacy.entity.Pharmacy;
+import medicine.mite.pharmacy.service.PharmacyService;
 import medicine.mite.naver.NaverMapProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

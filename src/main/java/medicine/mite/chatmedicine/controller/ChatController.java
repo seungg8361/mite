@@ -1,7 +1,7 @@
-package medicine.mite.chat.controller;
+package medicine.mite.chatmedicine.controller;
 
 import jakarta.servlet.http.HttpSession;
-import medicine.mite.chat.service.ChatService;
+import medicine.mite.chatmedicine.service.ChatService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

@@ -1,6 +1,6 @@
-package medicine.mite.naver.repository;
+package medicine.mite.pharmacy.repository;
 
-import medicine.mite.naver.entity.Drug;
+import medicine.mite.pharmacy.entity.Drug;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

@@ -1,4 +1,4 @@
-package medicine.mite.naver.entity;
+package medicine.mite.pharmacy.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;

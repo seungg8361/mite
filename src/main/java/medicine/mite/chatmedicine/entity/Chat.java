@@ -1,4 +1,4 @@
-package medicine.mite.chat.entity;
+package medicine.mite.chatmedicine.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

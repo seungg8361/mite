@@ -1,10 +1,10 @@
-package medicine.mite.chat.service;
+package medicine.mite.chatmedicine.service;
 
 import lombok.extern.slf4j.Slf4j;
-import medicine.mite.chat.repository.ChatRepository;
-import medicine.mite.chat.entity.Chat;
-import medicine.mite.chat.entity.Medicines;
-import medicine.mite.chat.repository.MedicineRepository;
+import medicine.mite.chatmedicine.repository.ChatRepository;
+import medicine.mite.chatmedicine.entity.Chat;
+import medicine.mite.chatmedicine.entity.Medicines;
+import medicine.mite.chatmedicine.repository.MedicineRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

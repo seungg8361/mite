@@ -1,4 +1,4 @@
-package medicine.mite.chat.dto;
+package medicine.mite.chatmedicine.dto;
 
 import lombok.Data;
 

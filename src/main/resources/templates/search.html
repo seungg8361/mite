@@ -10,7 +10,7 @@
 </head>
 <body>
 <div class="sidebar" id="sidebar">
-  <div id="pharmacy-details"></div>
+  <div id="pharmacy"></div>
 </div>
 <div id="map"></div>
 
@@ -62,7 +62,7 @@
   }
 
   function displayPharmacyInfo(pharmacy) {
-    const pharmacyDetails = document.getElementById('pharmacy-details');
+    const pharmacyDetails = document.getElementById('pharmacy');
     const imageUrl = pharmacy.pimage;
     pharmacyDetails.innerHTML = `
       <div class="pharmacy-info">

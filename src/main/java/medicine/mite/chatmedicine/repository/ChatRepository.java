@@ -1,6 +1,6 @@
-package medicine.mite.chat.repository;
+package medicine.mite.chatmedicine.repository;
 
-import medicine.mite.chat.entity.Chat;
+import medicine.mite.chatmedicine.entity.Chat;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

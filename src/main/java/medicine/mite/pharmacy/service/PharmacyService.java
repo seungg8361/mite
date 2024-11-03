@@ -1,9 +1,9 @@
-package medicine.mite.naver.service;
+package medicine.mite.pharmacy.service;
 
-import medicine.mite.naver.entity.Drug;
-import medicine.mite.naver.entity.Pharmacy;
-import medicine.mite.naver.repository.DrugRepository;
-import medicine.mite.naver.repository.PharmacyRepository;
+import medicine.mite.pharmacy.entity.Drug;
+import medicine.mite.pharmacy.entity.Pharmacy;
+import medicine.mite.pharmacy.repository.DrugRepository;
+import medicine.mite.pharmacy.repository.PharmacyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

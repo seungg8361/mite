@@ -2,8 +2,8 @@ package medicine.mite.user.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import medicine.mite.chat.dto.MedicineDto;
-import medicine.mite.chat.entity.Medicines;
+import medicine.mite.chatmedicine.dto.MedicineDto;
+import medicine.mite.chatmedicine.entity.Medicines;
 import org.springframework.stereotype.Service;
 
 import jakarta.servlet.http.HttpSession;
